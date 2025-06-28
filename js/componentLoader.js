@@ -8,6 +8,7 @@ class ComponentLoader {
             'skills': 'components/skills.html',
             'projects': 'components/projects.html',
             'contact': 'components/contact.html',
+            'test': 'components/test.html',
             'footer': 'components/footer.html'
         };
         this.loadedComponents = 0;
