@@ -172,5 +172,3 @@ If you need help customizing the website:
 This project is open source and available under the MIT License.
 
 ---
-
-**Good luck with your software engineering career, Lachlan!** 🚀 
