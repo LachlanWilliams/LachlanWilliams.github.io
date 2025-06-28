@@ -419,102 +419,119 @@ section {
     color: #1d4ed8;
 }
 
-/* Contact Section */
-.contact-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    max-width: 1000px;
-    margin: 0 auto;
+/* Contact Section - Redesigned */
+.contact {
+    background: #f8fafc;
 }
 
-.contact-info h3 {
+.contact-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact-intro {
+    margin-bottom: 3rem;
+}
+
+.contact-intro h3 {
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: 1rem;
     color: #1f2937;
 }
 
-.contact-info p {
+.contact-intro p {
+    font-size: 1.1rem;
     color: #6b7280;
-    margin-bottom: 2rem;
     line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-.contact-items {
-    margin-bottom: 2rem;
+.social-links-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background: #f8fafc;
-    border-radius: 8px;
-}
-
-.contact-item i {
-    color: #2563eb;
-    font-size: 1.2rem;
-    width: 20px;
-}
-
-.social-links {
-    display: flex;
-    gap: 1rem;
-}
-
-.social-link {
-    width: 50px;
-    height: 50px;
-    background: #2563eb;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.social-link:hover {
-    background: #1d4ed8;
-    transform: translateY(-3px);
-}
-
-.contact-form {
+.social-card {
     background: white;
-    padding: 2rem;
-    border-radius: 12px;
+    padding: 2.5rem;
+    border-radius: 16px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    text-align: center;
+    border: 2px solid transparent;
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 1rem;
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-    font-family: inherit;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
+.social-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     border-color: #2563eb;
 }
 
-.form-group textarea {
-    resize: vertical;
-    min-height: 120px;
+.social-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.social-card:hover .social-icon {
+    transform: scale(1.1);
+}
+
+.social-info h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+}
+
+.social-info p {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid #2563eb;
+}
+
+.social-btn:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.social-btn i {
+    font-size: 0.875rem;
+    transition: transform 0.3s ease;
+}
+
+.social-btn:hover i {
+    transform: translateX(3px);
 }
 
 /* Footer */
@@ -584,9 +601,13 @@ section {
         grid-template-columns: 1fr;
     }
 
-    .contact-content {
+    .social-links-container {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
+    }
+
+    .social-card {
+        padding: 2rem;
     }
 
     .hero-buttons {
@@ -619,6 +640,16 @@ section {
 
     .project-card {
         margin: 0 10px;
+    }
+
+    .social-card {
+        padding: 1.5rem;
+    }
+
+    .social-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
     }
 }
 
