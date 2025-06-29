@@ -10,32 +10,562 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation Component -->
-    <div data-component="navigation"></div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>LW</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#skills" class="nav-link">Skills</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#projects" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav> 
 
-    <!-- Hero Section Component -->
-    <div data-component="hero"></div>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Hi, I'm Lachlan Williams</h1>
+                <h2 class="hero-subtitle">Aspiring Software Engineer</h2>
+                <p class="hero-description">
+                    Passionate about creating innovative solutions and building the future through code. 
+                    Currently seeking opportunities to grow and contribute to meaningful projects
+                </p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="profile-image">
+                    <img src="resources/profile.JPG" alt="Lachlan Williams - Software Engineer" />
+                </div>
+            </div>
+        </div>
+    </section> 
 
-    <!-- About Section Component -->
-    <div data-component="about"></div>
 
-    <!-- Skills Section Component -->
-    <div data-component="skills"></div>
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        I'm a passionate and driven individual with a strong foundation in software development 
+                        and a keen interest in creating impactful solutions. My journey in technology has been 
+                        fueled by curiosity and a desire to solve complex problems through innovative code.
+                    </p>
+                    <p>
+                        I believe in continuous learning and staying up-to-date with the latest technologies 
+                        and best practices in software engineering. My goal is to contribute to projects that 
+                        make a difference and work with teams that value creativity and collaboration.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <h3>2+</h3>
+                            <p>Years Learning</p>
+                        </div>
+                        <div class="stat">
+                            <h3>10+</h3>
+                            <p>Projects Completed</p>
+                        </div>
+                        <div class="stat">
+                            <h3>5+</h3>
+                            <p>Technologies</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
 
-    <!-- Projects Section Component -->
-    <div data-component="projects"></div>
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Skills & Technologies</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <i class="fab fa-js-square"></i>
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-java"></i>
+                            <span>Java</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-code"></i>
+                            <span>HTML/CSS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Frameworks & Tools</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <i class="fab fa-react"></i>
+                            <span>React</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-node-js"></i>
+                            <span>Node.js</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-git-alt"></i>
+                            <span>Git</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-database"></i>
+                            <span>SQL</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Soft Skills</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <i class="fas fa-users"></i>
+                            <span>Team Collaboration</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Problem Solving</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-comments"></i>
+                            <span>Communication</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Time Management</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
 
-    <!-- Contact Section Component -->
-    <div data-component="contact"></div>
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Personal Portfolio Website</h3>
+                        <p>A responsive personal portfolio built with HTML, CSS, and JavaScript showcasing my skills and projects.</p>
+                        <div class="project-tech">
+                            <span>HTML</span>
+                            <span>CSS</span>
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><i class="fab fa-github"></i> Code</a>
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Task Management App</h3>
+                        <p>A full-stack task management application with user authentication and real-time updates.</p>
+                        <div class="project-tech">
+                            <span>React</span>
+                            <span>Node.js</span>
+                            <span>MongoDB</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><i class="fab fa-github"></i> Code</a>
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Data Visualization Dashboard</h3>
+                        <p>An interactive dashboard for visualizing complex datasets with filtering and export capabilities.</p>
+                        <div class="project-tech">
+                            <span>Python</span>
+                            <span>Django</span>
+                            <span>Chart.js</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><i class="fab fa-github"></i> Code</a>
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
 
-    <!-- Test Section Component -->
-    <div data-component="test"></div>
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Let's Connect</h2>
+            <div class="contact-content">
+                <div class="contact-intro">
+                    <h3>Ready to collaborate?</h3>
+                    <p>I'm always excited to work on new projects and opportunities. Feel free to reach out through my professional networks below.</p>
+                </div>
+                <div class="social-links-container">
+                    <div class="social-card">
+                        <div class="social-icon">
+                            <i class="fab fa-linkedin"></i>
+                        </div>
+                        <div class="social-info">
+                            <h4>LinkedIn</h4>
+                            <p>Connect with me professionally</p>
+                            <a href="https://www.linkedin.com/in/lachlan-w/" target="_blank" rel="noopener noreferrer" class="social-btn">
+                                <span>View Profile</span>
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="social-card">
+                        <div class="social-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <div class="social-info">
+                            <h4>GitHub</h4>
+                            <p>Check out my projects and code</p>
+                            <a href="https://github.com/LachlanWilliams" target="_blank" rel="noopener noreferrer" class="social-btn">
+                                <span>View Profile</span>
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
 
-    <!-- Footer Component -->
-    <div data-component="footer"></div>
+    <!-- Space Invaders Game -->
+    <section id="space-invaders-game" class="game-section">
+        <div class="section-header">
+            <h2>Space Invaders Game</h2>
+            <p>Take a break and enjoy a classic arcade game! Click on the game area to start playing.</p>
+        </div>
+            
+        <div class="game-container" id="gameContainer">
+            <div class="click-to-start" id="clickToStart">
+                <div class="start-content">
+                    <h3>Click to Start</h3>
+                    <p>Use ← → to move, F to shoot</p>
+                    <div class="start-icon">🎮</div>
+                </div>
+            </div>
+            <div class="stars" id="stars"></div>
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+            <div class="game-ui">
+                <div>Score: <span id="score">0</span></div>
+                <div>Lives: <span id="lives">3</span></div>
+            </div>
+            <div class="game-over" id="gameOver">
+                <h2>Game Over!</h2>
+                <p>Final Score: <span id="finalScore">0</span></p>
+                <button class="restart-btn" onclick="restartGame()">Play Again</button>
+            </div>
+            <div class="instructions">
+                Use ← → to move, F to shoot
+            </div>
+        </div>
+        <style>
+            .game-section {
+                padding: 80px 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                text-align: center;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                color: white;
+            }
+    
+            .section-header {
+                margin-bottom: 50px;
+                color: #ffffff;
+            }
+    
+            .section-header h2 {
+                font-size: 3rem;
+                margin-bottom: 15px;
+                color: #fbbf24;
+                font-weight: 700;
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+    
+            .section-header p {
+                font-size: 1.2rem;
+                opacity: 0.9;
+                max-width: 600px;
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+    
+            .game-container {
+                position: relative;
+                width: 800px;
+                height: 600px;
+                border: 3px solid #fbbf24;
+                border-radius: 15px;
+                background: #1f2937;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                overflow: hidden;
+                margin: 0 auto;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .game-container:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            }
+    
+            .click-to-start {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(31, 41, 55, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 30;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(5px);
+            }
+    
+            .click-to-start:hover {
+                background: rgba(31, 41, 55, 0.8);
+                transform: scale(1.02);
+            }
+    
+            .start-content {
+                text-align: center;
+                color: #ffffff;
+            }
+    
+            .start-content h3 {
+                font-size: 2.5rem;
+                margin-bottom: 15px;
+                color: #fbbf24;
+                font-weight: 700;
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+    
+            .start-content p {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+                opacity: 0.9;
+                color: #ffffff;
+            }
+    
+            .start-icon {
+                font-size: 4rem;
+                animation: pulse 2s infinite;
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            }
+    
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
+    
+            #gameCanvas {
+                display: block;
+                background: radial-gradient(circle at center, #374151 0%, #1f2937 70%);
+            }
+    
+            .game-ui {
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                color: #fbbf24;
+                font-size: 18px;
+                font-weight: 600;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+                z-index: 10;
+                background: rgba(31, 41, 55, 0.8);
+                padding: 10px 15px;
+                border-radius: 8px;
+                backdrop-filter: blur(5px);
+            }
+    
+            .game-over {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(31, 41, 55, 0.95);
+                color: #ef4444;
+                padding: 40px;
+                border-radius: 15px;
+                border: 2px solid #ef4444;
+                text-align: center;
+                font-size: 24px;
+                display: none;
+                z-index: 20;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            }
+    
+            .game-over h2 {
+                margin-bottom: 20px;
+                color: #ef4444;
+                font-weight: 700;
+            }
+    
+            .restart-btn {
+                background: #fbbf24;
+                color: #1f2937;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                margin-top: 15px;
+                transition: all 0.3s ease;
+            }
+    
+            .restart-btn:hover {
+                background: #f59e0b;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+            }
+    
+            .instructions {
+                position: absolute;
+                bottom: 15px;
+                left: 15px;
+                color: #ffffff;
+                font-size: 14px;
+                opacity: 0.8;
+                background: rgba(31, 41, 55, 0.8);
+                padding: 8px 12px;
+                border-radius: 6px;
+                backdrop-filter: blur(5px);
+            }
+    
+            .stars {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+            }
+    
+            .star {
+                position: absolute;
+                width: 2px;
+                height: 2px;
+                background: white;
+                border-radius: 50%;
+                animation: twinkle 2s infinite;
+            }
+    
+            @keyframes twinkle {
+                0%, 100% { opacity: 0.3; }
+                50% { opacity: 1; }
+            }
+    
+            /* Responsive design */
+            @media (max-width: 900px) {
+                .game-container {
+                    width: 100%;
+                    max-width: 600px;
+                    height: 450px;
+                }
+                
+                #gameCanvas {
+                    width: 100%;
+                    height: 100%;
+                }
+                
+                .section-header h2 {
+                    font-size: 2.5rem;
+                }
+    
+                .start-content h3 {
+                    font-size: 2rem;
+                }
+            }
+    
+            @media (max-width: 600px) {
+                .game-container {
+                    height: 400px;
+                }
+                
+                .section-header h2 {
+                    font-size: 2rem;
+                }
+                
+                .section-header p {
+                    font-size: 1rem;
+                }
+    
+                .start-content h3 {
+                    font-size: 1.5rem;
+                }
+    
+                .start-content p {
+                    font-size: 1rem;
+                }
+    
+                .start-icon {
+                    font-size: 3rem;
+                }
+            }
+        </style>
+    </section> 
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Lachlan Williams. All rights reserved.</p>
+        </div>
+    </footer> 
 
     <!-- Scripts -->
-    <script src="js/componentLoader.js"></script>
+    <!-- <script src="js/componentLoader.js"></script> -->
     <script src="script.js"></script>
 </body>
 </html> 

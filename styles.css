@@ -675,6 +675,230 @@ section {
     }
 }
 
+/* Space Invaders Game */
+.game-section {
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-header {
+    margin-bottom: 40px;
+    color: #ffffff;
+}
+
+.section-header h2 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    color: #00ff88;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.section-header p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    border: 3px solid #00ff88;
+    border-radius: 10px;
+    background: #000;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.click-to-start {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 30;
+    transition: all 0.3s ease;
+}
+
+.click-to-start:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.02);
+}
+
+.start-content {
+    text-align: center;
+    color: #ffffff;
+}
+
+.start-content h3 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #00ff88;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+}
+
+.start-content p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.start-icon {
+    font-size: 4rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+#gameCanvas {
+    display: block;
+    background: radial-gradient(circle at center, #001122 0%, #000 70%);
+}
+
+.game-ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #00ff88;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ff88;
+    z-index: 10;
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: #ff4444;
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #ff4444;
+    text-align: center;
+    font-size: 24px;
+    display: none;
+    z-index: 20;
+}
+
+.game-over h2 {
+    margin-bottom: 20px;
+    color: #ff4444;
+}
+
+.restart-btn {
+    background: #00ff88;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+    background: #00cc6a;
+    transform: scale(1.05);
+}
+
+.instructions {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: #ffffff;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* Responsive design */
+@media (max-width: 900px) {
+    .game-container {
+        width: 100%;
+        max-width: 600px;
+        height: 450px;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .section-header h2 {
+        font-size: 2.5rem;
+    }
+
+    .start-content h3 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .game-container {
+        height: 400px;
+    }
+    
+    .section-header h2 {
+        font-size: 2rem;
+    }
+    
+    .section-header p {
+        font-size: 1rem;
+    }
+
+    .start-content h3 {
+        font-size: 1.5rem;
+    }
+
+    .start-content p {
+        font-size: 1rem;
+    }
+
+    .start-icon {
+        font-size: 3rem;
+    }
+}
+
+
 /* Animations */
 @keyframes fadeInUp {
     from {
