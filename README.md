@@ -173,24 +173,24 @@ This project is open source and available under the MIT License.
 
 ---
 
-## ✅ **Space Invaders Successfully Moved!**
+## ✅ **Retro Game Successfully Moved!**
 
 ### **What Was Accomplished:**
 
-1. **Created a dedicated Space Invaders page** (`space-invaders/index.html`) that contains:
-   - Complete Space Invaders game implementation
+1. **Created a dedicated Retro Game page** (`space-invaders/index.html`) that contains:
+   - Complete Retro Game implementation
    - All necessary HTML, CSS, and JavaScript
    - Beautiful, responsive design matching the main site's aesthetic
    - Navigation header with a "Back to Portfolio" link
    - Full game functionality with controls, scoring, and restart capability
 
 2. **Updated the main page** (`index.html`):
-   - Removed the entire Space Invaders section (HTML, CSS, and inline styles)
+   - Removed the entire Retro Game section (HTML, CSS, and inline styles)
    - Added navigation link to `space-invaders/` in the menu
    - Maintained all other functionality (contact section, etc.)
 
 3. **Cleaned up the main script** (`script.js`):
-   - Removed all Space Invaders game code (over 400 lines!)
+   - Removed all Retro Game code (over 400 lines!)
    - Kept all essential portfolio functionality intact
    - Reduced file size from 716 lines to 220 lines
 
@@ -198,7 +198,7 @@ This project is open source and available under the MIT License.
 
 - **Main site**: `https://lachlanwilliams.github.io/`
 - **Wave Function Collapse**: `https://lachlanwilliams.github.io/wave-collapse/`
-- **Space Invaders**: `https://lachlanwilliams.github.io/space-invaders/`
+- **Retro Game**: `https://lachlanwilliams.github.io/space-invaders/`
 
 ### **Benefits Achieved:**
 
@@ -218,8 +218,8 @@ Main Portfolio
 ├── Skills
 ├── Projects
 ├── Wave Function Collapse → /wave-collapse/
-├── Space Invaders → /space-invaders/
+├── Retro Game → /space-invaders/
 └── Contact
 ```
 
-Both the Wave Function Collapse and Space Invaders games are now accessible as clean subdomains, providing a much more organized and professional portfolio experience! 🎮✨
+Both the Wave Function Collapse and Retro Game are now accessible as clean subdomains, providing a much more organized and professional portfolio experience! 🎮✨
