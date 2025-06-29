@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Function Collapse - Lachlan Williams</title>
+    <meta name="description" content="Wave Function Collapse algorithm implementation - a fascinating procedural generation technique inspired by quantum mechanics.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: #fbbf24;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #f59e0b;
+            transform: translateX(-5px);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fbbf24;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .wfc-section {
+            padding: 40px 0;
+        }
+        
+        .wfc-section .section-title {
+            color: #fbbf24;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .wfc-section .section-description {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .wfc-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .wfc-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            color: #fbbf24;
+        }
+        
+        .control-group select {
+            padding: 8px 12px;
+            border: 2px solid #fbbf24;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-group select:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+        }
+        
+        .wfc-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .wfc-btn.primary {
+            background: #fbbf24;
+            color: #1f2937;
+        }
+        
+        .wfc-btn.primary:hover {
+            background: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
+        }
+        
+        .wfc-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .wfc-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .wfc-canvas-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        #wfcCanvas {
+            border: 3px solid #fbbf24;
+            border-radius: 12px;
+            background: #1f2937;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        #wfcCanvas:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+        
+        .wfc-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(31, 41, 55, 0.9);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+        
+        .wfc-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .wfc-info {
+            text-align: center;
+            color: white;
+        }
+        
+        .wfc-info h3 {
+            color: #fbbf24;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .wfc-info p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+        
+        .wfc-stats {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: #fbbf24;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .wfc-explanation {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .wfc-explanation h3 {
+            color: #fbbf24;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .explanation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .explanation-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .explanation-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .explanation-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+        
+        .explanation-item h4 {
+            color: #fbbf24;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .explanation-item p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 768px) {
+            .wfc-controls {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .control-group {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            #wfcCanvas {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+            }
+            
+            .wfc-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .explanation-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .wfc-section .section-title {
+                font-size: 2rem;
+            }
+            
+            .wfc-section .section-description {
+                font-size: 1rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Back to Portfolio
+            </a>
+            <h1 class="page-title">Wave Function Collapse</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Wave Function Collapse Section -->
+        <section class="wfc-section">
+            <div class="wfc-container">
+                <h2 class="section-title">Wave Function Collapse</h2>
+                <p class="section-description">
+                    My first attempt at implementing the Wave Function Collapse algorithm - a fascinating procedural generation technique 
+                    inspired by quantum mechanics. 
+                </p>
+                
+                <div class="wfc-controls">
+                    <div class="control-group">
+                        <label for="gridSize">Grid Size:</label>
+                        <select id="gridSize">
+                            <option value="12" selected>12x12</option>
+                            <option value="16">16x16</option>
+                            <option value="20">20x20</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <button id="generateBtn" class="wfc-btn primary">Generate Pattern</button>
+                        <button id="stepBtn" class="wfc-btn secondary">Step by Step</button>
+                        <button id="resetBtn" class="wfc-btn secondary">Reset</button>
+                    </div>
+                </div>
+                
+                <div class="wfc-canvas-container">
+                    <canvas id="wfcCanvas" width="600" height="600"></canvas>
+                    <div class="wfc-overlay" id="wfcOverlay">
+                        <div class="wfc-info">
+                            <h3>Wave Function Collapse</h3>
+                            <p>Click "Generate Pattern" to see the algorithm in action!</p>
+                            <div class="wfc-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">Entropy:</span>
+                                    <span class="stat-value" id="entropyValue">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Collapsed:</span>
+                                    <span class="stat-value" id="collapsedValue">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wfc-explanation">
+                    <h3>How It Works</h3>
+                    <div class="explanation-grid">
+                        <div class="explanation-item">
+                            <div class="explanation-icon">🎲</div>
+                            <h4>Superposition</h4>
+                            <p>Each cell starts in a superposition of all possible tile states, represented by the number of possibilities.</p>
+                        </div>
+                        <div class="explanation-item">
+                            <div class="explanation-icon">⚡</div>
+                            <h4>Collapse</h4>
+                            <p>The cell with the lowest entropy (fewest possibilities) is chosen and collapsed to a single state.</p>
+                        </div>
+                        <div class="explanation-item">
+                            <div class="explanation-icon">🌊</div>
+                            <h4>Propagation</h4>
+                            <p>Constraints are propagated to neighboring cells, reducing their possible states based on compatibility rules.</p>
+                        </div>
+                        <div class="explanation-item">
+                            <div class="explanation-icon">🔄</div>
+                            <h4>Iteration</h4>
+                            <p>This process repeats until all cells are collapsed, creating a coherent pattern that respects the constraints.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /**
+         *   ------------------------------------------------------------ WAVE FUNCTION COLLAPSE ------------------------------------------------------------ 
+         */
+
+        class WaveFunctionCollapse {
+            constructor(canvas, gridSize = 12) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.gridSize = gridSize;
+                this.tileSize = canvas.width / gridSize;
+                this.grid = [];
+                this.entropy = [];
+                this.collapsed = [];
+                this.stepMode = false;
+                this.isRunning = false;
+                this.tileSet = 'simple';
+                
+                // Define tile sets
+                this.tileSets = {
+                    simple: {
+                        tiles: ['grass', 'forest', 'sand', 'water'],
+                        weights: [0.4, 0.1, 0.2, 0.3],
+                        colors: ['#90EE90', '#228B22', '#F4A460', '#4169E1']
+                    }
+                };
+                
+                this.initialize();
+            }
+            
+            initialize() {
+                this.createGrid();
+                this.calculateEntropy();
+                this.draw();
+            }
+            
+            createGrid() {
+                this.grid = [];
+                this.collapsed = [];
+                
+                for (let y = 0; y < this.gridSize; y++) {
+                    this.grid[y] = [];
+                    this.collapsed[y] = [];
+                    for (let x = 0; x < this.gridSize; x++) {
+                        this.grid[y][x] = [...this.tileSets[this.tileSet].tiles];
+                        this.collapsed[y][x] = false;
+                    }
+                }
+            }
+            
+            calculateEntropy() {
+                this.entropy = [];
+                for (let y = 0; y < this.gridSize; y++) {
+                    this.entropy[y] = [];
+                    for (let x = 0; x < this.gridSize; x++) {
+                        if (this.collapsed[y][x]) {
+                            this.entropy[y][x] = Infinity;
+                        } else {
+                            this.entropy[y][x] = this.grid[y][x].length;
+                        }
+                    }
+                }
+            }
+            
+            findLowestEntropy() {
+                let minEntropy = Infinity;
+                let candidates = [];
+                
+                for (let y = 0; y < this.gridSize; y++) {
+                    for (let x = 0; x < this.gridSize; x++) {
+                        if (!this.collapsed[y][x] && this.entropy[y][x] < minEntropy) {
+                            minEntropy = this.entropy[y][x];
+                            candidates = [{x, y}];
+                        } else if (!this.collapsed[y][x] && this.entropy[y][x] === minEntropy) {
+                            candidates.push({x, y});
+                        }
+                    }
+                }
+                
+                return candidates.length > 0 ? candidates[Math.floor(Math.random() * candidates.length)] : null;
+            }
+            
+            collapseCell(x, y) {
+                if (this.collapsed[y][x] || this.grid[y][x].length === 0) return false;
+                
+                const tileSet = this.tileSets[this.tileSet];
+                let weights = this.grid[y][x].map(tile => {
+                    const index = tileSet.tiles.indexOf(tile);
+                    return tileSet.weights[index];
+                });
+                
+                const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+                let random = Math.random() * totalWeight;
+                
+                for (let i = 0; i < this.grid[y][x].length; i++) {
+                    random -= weights[i];
+                    if (random <= 0) {
+                        this.grid[y][x] = [this.grid[y][x][i]];
+                        break;
+                    }
+                }
+                
+                this.collapsed[y][x] = true;
+                this.entropy[y][x] = Infinity;
+                return true;
+            }
+            
+            propagateConstraints(x, y) {
+                const collapsedTile = this.grid[y][x][0];
+                const neighbors = this.getNeighbors(x, y);
+                
+                for (const neighbor of neighbors) {
+                    if (!this.collapsed[neighbor.y][neighbor.x]) {
+                        // Simple constraint: reduce variety based on collapsed neighbor
+                        const currentTiles = this.grid[neighbor.y][neighbor.x];
+                        const allowedTiles = this.getCompatibleTiles(collapsedTile, neighbor.direction);
+                        
+                        this.grid[neighbor.y][neighbor.x] = currentTiles.filter(tile => 
+                            allowedTiles.includes(tile)
+                        );
+                        
+                        // If no tiles remain, add some random ones back
+                        if (this.grid[neighbor.y][neighbor.x].length === 0) {
+                            this.grid[neighbor.y][neighbor.x] = [...this.tileSets[this.tileSet].tiles];
+                        }
+                    }
+                }
+            }
+            
+            getNeighbors(x, y) {
+                const neighbors = [];
+                const directions = [
+                    {dx: -1, dy: 0, direction: 'left'},
+                    {dx: 1, dy: 0, direction: 'right'},
+                    {dx: 0, dy: -1, direction: 'up'},
+                    {dx: 0, dy: 1, direction: 'down'}
+                ];
+                
+                for (const dir of directions) {
+                    const nx = x + dir.dx;
+                    const ny = y + dir.dy;
+                    
+                    if (nx >= 0 && nx < this.gridSize && ny >= 0 && ny < this.gridSize) {
+                        neighbors.push({x: nx, y: ny, direction: dir.direction});
+                    }
+                }
+                
+                return neighbors;
+            }
+            
+            getCompatibleTiles(tile, direction) {
+                // Enhanced compatibility rules for water clustering
+                const tileSet = this.tileSets[this.tileSet];
+                
+                if (tile === 'grass') return ['grass', 'forest', 'sand'];
+                if (tile === 'forest') return ['forest', 'grass'];
+                if (tile === 'sand') return ['sand', 'grass', 'water'];
+                if (tile === 'water') return ['water', 'sand']; // Water only connects to sand and other water
+                
+                return tileSet.tiles;
+            }
+            
+            step() {
+                if (this.isRunning) return;
+                
+                const lowestEntropy = this.findLowestEntropy();
+                if (!lowestEntropy) {
+                    this.isRunning = false;
+                    this.updateStats();
+                    return;
+                }
+                
+                if (this.collapseCell(lowestEntropy.x, lowestEntropy.y)) {
+                    this.propagateConstraints(lowestEntropy.x, lowestEntropy.y);
+                    this.calculateEntropy();
+                    this.draw();
+                    this.updateStats();
+                }
+            }
+            
+            run() {
+                if (this.isRunning) return;
+                
+                this.isRunning = true;
+                this.runStep();
+            }
+            
+            runStep() {
+                if (!this.isRunning) return;
+                
+                const lowestEntropy = this.findLowestEntropy();
+                if (!lowestEntropy) {
+                    this.isRunning = false;
+                    this.updateStats();
+                    return;
+                }
+                
+                if (this.collapseCell(lowestEntropy.x, lowestEntropy.y)) {
+                    this.propagateConstraints(lowestEntropy.x, lowestEntropy.y);
+                    this.calculateEntropy();
+                    this.draw();
+                    this.updateStats();
+                    
+                    if (!this.stepMode) {
+                        setTimeout(() => this.runStep(), 50);
+                    }
+                }
+            }
+            
+            reset() {
+                this.isRunning = false;
+                this.createGrid();
+                this.calculateEntropy();
+                this.draw();
+                this.updateStats();
+                
+                // Show overlay
+                const overlay = document.getElementById('wfcOverlay');
+                if (overlay) {
+                    overlay.classList.remove('hidden');
+                }
+            }
+            
+            setGridSize(size) {
+                this.gridSize = size;
+                this.tileSize = this.canvas.width / size;
+                this.reset();
+            }
+            
+            setTileSet(tileSet) {
+                this.tileSet = tileSet;
+                this.reset();
+            }
+            
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                for (let y = 0; y < this.gridSize; y++) {
+                    for (let x = 0; x < this.gridSize; x++) {
+                        const tileX = x * this.tileSize;
+                        const tileY = y * this.tileSize;
+                        
+                        if (this.collapsed[y][x]) {
+                            // Draw collapsed tile
+                            const tile = this.grid[y][x][0];
+                            const tileSet = this.tileSets[this.tileSet];
+                            const colorIndex = tileSet.tiles.indexOf(tile);
+                            this.ctx.fillStyle = tileSet.colors[colorIndex];
+                            this.ctx.fillRect(tileX, tileY, this.tileSize, this.tileSize);
+                            
+                            // Add some texture
+                            this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                            this.ctx.lineWidth = 1;
+                            this.ctx.strokeRect(tileX, tileY, this.tileSize, this.tileSize);
+                        } else {
+                            // Draw superposition
+                            const possibilities = this.grid[y][x].length;
+                            const alpha = 0.3 + (0.7 * (1 - possibilities / this.tileSets[this.tileSet].tiles.length));
+                            
+                            this.ctx.fillStyle = `rgba(128, 128, 128, ${alpha})`;
+                            this.ctx.fillRect(tileX, tileY, this.tileSize, this.tileSize);
+                            
+                            // Draw possibility count
+                            this.ctx.fillStyle = 'white';
+                            this.ctx.font = `${this.tileSize / 3}px Arial`;
+                            this.ctx.textAlign = 'center';
+                            this.ctx.fillText(possibilities, tileX + this.tileSize / 2, tileY + this.tileSize / 2 + this.tileSize / 6);
+                        }
+                    }
+                }
+            }
+            
+            updateStats() {
+                const entropyElement = document.getElementById('entropyValue');
+                const collapsedElement = document.getElementById('collapsedValue');
+                
+                if (entropyElement && collapsedElement) {
+                    let totalEntropy = 0;
+                    let collapsedCount = 0;
+                    
+                    for (let y = 0; y < this.gridSize; y++) {
+                        for (let x = 0; x < this.gridSize; x++) {
+                            if (!this.collapsed[y][x]) {
+                                totalEntropy += this.entropy[y][x];
+                            } else {
+                                collapsedCount++;
+                            }
+                        }
+                    }
+                    
+                    const totalCells = this.gridSize * this.gridSize;
+                    const collapsedPercentage = Math.round((collapsedCount / totalCells) * 100);
+                    
+                    entropyElement.textContent = totalEntropy;
+                    collapsedElement.textContent = `${collapsedPercentage}%`;
+                    
+                    // Hide overlay when generation starts
+                    if (collapsedCount > 0) {
+                        const overlay = document.getElementById('wfcOverlay');
+                        if (overlay) {
+                            overlay.classList.add('hidden');
+                        }
+                    }
+                }
+            }
+        }
+
+        // Global instance
+        let wfcInstance = null;
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Wave Function Collapse
+            const wfcCanvas = document.getElementById('wfcCanvas');
+            if (wfcCanvas) {
+                wfcInstance = new WaveFunctionCollapse(wfcCanvas, 12);
+                
+                // Event listeners for controls
+                const generateBtn = document.getElementById('generateBtn');
+                const stepBtn = document.getElementById('stepBtn');
+                const resetBtn = document.getElementById('resetBtn');
+                const gridSizeSelect = document.getElementById('gridSize');
+                
+                if (generateBtn) {
+                    generateBtn.addEventListener('click', () => {
+                        wfcInstance.stepMode = false;
+                        wfcInstance.run();
+                    });
+                }
+                
+                if (stepBtn) {
+                    stepBtn.addEventListener('click', () => {
+                        wfcInstance.stepMode = true;
+                        wfcInstance.step();
+                    });
+                }
+                
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', () => {
+                        wfcInstance.reset();
+                        wfcInstance.draw();
+                        const overlay = document.getElementById('wfcOverlay');
+                        if (overlay) {
+                            overlay.classList.remove('hidden');
+                        }
+                    });
+                }
+                
+                if (gridSizeSelect) {
+                    gridSizeSelect.addEventListener('change', (e) => {
+                        const size = parseInt(e.target.value);
+                        wfcInstance.setGridSize(size);
+                    });
+                }
+            }
+        });
+
+        /**
+         *   ------------------------------------------------------------ END WAVE FUNCTION COLLAPSE ------------------------------------------------------------ 
+         */
+    </script>
+</body>
+</html>

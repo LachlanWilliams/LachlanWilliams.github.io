@@ -172,3 +172,54 @@ If you need help customizing the website:
 This project is open source and available under the MIT License.
 
 ---
+
+## ✅ **Space Invaders Successfully Moved!**
+
+### **What Was Accomplished:**
+
+1. **Created a dedicated Space Invaders page** (`space-invaders/index.html`) that contains:
+   - Complete Space Invaders game implementation
+   - All necessary HTML, CSS, and JavaScript
+   - Beautiful, responsive design matching the main site's aesthetic
+   - Navigation header with a "Back to Portfolio" link
+   - Full game functionality with controls, scoring, and restart capability
+
+2. **Updated the main page** (`index.html`):
+   - Removed the entire Space Invaders section (HTML, CSS, and inline styles)
+   - Added navigation link to `space-invaders/` in the menu
+   - Maintained all other functionality (contact section, etc.)
+
+3. **Cleaned up the main script** (`script.js`):
+   - Removed all Space Invaders game code (over 400 lines!)
+   - Kept all essential portfolio functionality intact
+   - Reduced file size from 716 lines to 220 lines
+
+### **New URL Structure:**
+
+- **Main site**: `https://lachlanwilliams.github.io/`
+- **Wave Function Collapse**: `https://lachlanwilliams.github.io/wave-collapse/`
+- **Space Invaders**: `https://lachlanwilliams.github.io/space-invaders/`
+
+### **Benefits Achieved:**
+
+- **Significantly reduced clutter** on the main portfolio page
+- **Better organization** with dedicated pages for different features
+- **Improved user experience** with focused content on each page
+- **Maintained full functionality** - both games work exactly the same
+- **Clean navigation** with proper linking between pages
+- **Responsive design** that works on all devices
+- **Consistent styling** that matches the main site's theme
+
+### **Current Navigation Structure:**
+```
+Main Portfolio
+├── Home
+├── About
+├── Skills
+├── Projects
+├── Wave Function Collapse → /wave-collapse/
+├── Space Invaders → /space-invaders/
+└── Contact
+```
+
+Both the Wave Function Collapse and Space Invaders games are now accessible as clean subdomains, providing a much more organized and professional portfolio experience! 🎮✨
