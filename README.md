@@ -79,9 +79,11 @@ Update the contact section with your real information:
 The website uses a modern color scheme that you can customize in `styles.css`:
 
 - Primary Blue: `#2563eb`
-- Secondary Purple: `#667eea` to `#764ba2` (gradient)
-- Accent Yellow: `#fbbf24`
-- Text Colors: Various shades of gray
+- Secondary Blue: `#1d4ed8`
+- Dark Gray: `#1f2937`
+- Light Gray: `#6b7280`
+- White: `#ffffff`
+- Accent White: `#ffffff`
 
 ## Deployment to GitHub Pages
 
