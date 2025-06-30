@@ -7,6 +7,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const startBtn = document.getElementById('start-btn');
   const sequenceDiv = document.getElementById('sequence');
 
+  // --- Retina/HiDPI Canvas Setup ---
+  function setupHiDPICanvas(canvas, context, width, height) {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    context.setTransform(1, 0, 0, 1, 0, 0); // Reset any existing transforms
+    context.scale(dpr, dpr);
+  }
+
+  // Set up canvas for crisp drawing
+  const baseWidth = 800;
+  const baseHeight = 400;
+  setupHiDPICanvas(canvas, ctx, baseWidth, baseHeight);
+
   let animationId = null;
   let isAnimating = false;
 
@@ -24,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function clearCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, baseWidth, baseHeight);
   }
 
   function drawAxes(margin, w, h, seq) {
@@ -82,12 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.restore();
   }
 
-  function animateSequence(seq, pace = 50) {
+  function animateSequence(seq, pace = 20) {
     clearCanvas();
     if (seq.length < 2) return;
-    const margin = 40;
-    const w = canvas.width - 2 * margin;
-    const h = canvas.height - 2 * margin;
+    const margin = 60;
+    const w = baseWidth - 2 * margin;
+    const h = baseHeight - 2 * margin;
     const maxVal = Math.max(...seq);
     const minVal = Math.min(...seq);
     let i = 1;
@@ -145,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const seq = collatzSequence(n);
     showSequence(seq);
     isAnimating = true;
-    animateSequence(seq, 20); // 50ms per step for medium pace
+    animateSequence(seq, 20); // 20ms per step for medium-fast pace
   }
 
   startBtn.addEventListener('click', visualize);
