@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collatz Conjecture Visualization - Lachlan Williams</title>
+  <meta name="description" content="Collatz Conjecture visualization - see how any number eventually reaches 1.">
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: white;
+    }
+    .header {
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    .back-link:hover {
+      color: #ffffff;
+      transform: translateX(-5px);
+    }
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .collatz-section {
+      padding: 40px 0;
+    }
+    .collatz-section .section-title {
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .collatz-section .section-description {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 50px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+    .collatz-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .collatz-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .control-group label {
+      font-weight: 600;
+      color: #ffffff;
+    }
+    .collatz-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      background: #ffffff;
+      color: #1f2937;
+    }
+    .collatz-btn:hover:not(:disabled) {
+      background: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+    }
+    .collatz-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .collatz-canvas-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    #collatz-canvas {
+      border: 3px solid #ffffff;
+      border-radius: 12px;
+      background: #1f2937;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    #collatz-canvas:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+    #sequence {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      word-break: break-all;
+      background: rgba(40,42,54,0.7);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 8px #0002;
+      text-align: center;
+    }
+    .collatz-explanation {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 40px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .collatz-explanation h3 {
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    .collatz-explanation p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      opacity: 0.92;
+      text-align: center;
+      margin-bottom: 0;
+    }
+    @media (max-width: 768px) {
+      .collatz-controls {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .control-group {
+        flex-direction: column;
+        gap: 5px;
+      }
+      #collatz-canvas {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+      }
+      .collatz-section .section-title {
+        font-size: 2rem;
+      }
+      .collatz-section .section-description {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="../index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Portfolio
+      </a>
+      <h1 class="page-title">Collatz Conjecture</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Collatz Conjecture Section -->
+    <section class="collatz-section">
+      <div class="collatz-container">
+        <h2 class="section-title">Collatz Conjecture Visualization</h2>
+        <p class="section-description">
+          The Collatz Conjecture is a simple yet mysterious mathematical process: <br>
+          <b>Start with any positive integer.</b> If it's even, divide it by 2. If it's odd, multiply by 3 and add 1. <br>
+          Repeat this process, and you'll always eventually reach 1—no matter what number you start with! <br>
+          <span style="opacity:0.7;font-size:0.98em;">Try different numbers below and watch the sequence unfold step by step.</span>
+        </p>
+        <div class="collatz-controls">
+          <div class="control-group">
+            <label for="start-number">Start Number:</label>
+            <input type="number" id="start-number" min="1" value="27">
+          </div>
+          <div class="control-group">
+            <button id="start-btn" class="collatz-btn">Visualize</button>
+          </div>
+        </div>
+        <div class="collatz-canvas-container">
+          <canvas id="collatz-canvas" width="800" height="400"></canvas>
+        </div>
+        <div id="sequence"></div>
+      </div>
+      <div class="collatz-explanation">
+        <h3>What is the Collatz Conjecture?</h3>
+        <p>
+          The Collatz Conjecture, also known as the "3x + 1 problem," is an unsolved question in mathematics. <br>
+          No matter what positive integer you start with, if you keep applying the Collatz rules, you'll always reach 1. <br>
+          Mathematicians have tested this for huge numbers, but no one has ever found a number that doesn't eventually reach 1—or proven that such a number can't exist!
+        </p>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html> 
