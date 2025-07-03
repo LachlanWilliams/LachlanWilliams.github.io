@@ -415,12 +415,18 @@
             // Player
             const player = {
                 x: canvas.width / 2,
-                y: canvas.height - 50,
-                width: 50,
-                height: 30,
+                y: canvas.height - 70,
+                width: 70,
+                height: 42,
                 speed: 5,
                 color: '#00ff88'
             };
+
+            // Load player image
+            const playerImg = new Image();
+            playerImg.src = 'spaceShip.png';
+            let playerImgLoaded = false;
+            playerImg.onload = () => { playerImgLoaded = true; };
 
             // Bullets
             let bullets = [];
@@ -501,8 +507,9 @@
 
             // Alien shoot function
             function alienShoot() {
-                if (aliens.length > 0 && Math.random() < 0.02) {
-                    const randomAlien = aliens[Math.floor(Math.random() * aliens.length)];
+                const aliveAliens = aliens.filter(a => a.alive);
+                if (aliveAliens.length > 0 && Math.random() < 0.02) {
+                    const randomAlien = aliveAliens[Math.floor(Math.random() * aliveAliens.length)];
                     alienBullets.push({
                         x: randomAlien.x + randomAlien.width / 2 - bulletSize / 2,
                         y: randomAlien.y + randomAlien.height,
@@ -631,12 +638,21 @@
 
             // Draw functions
             function drawPlayer() {
-                ctx.fillStyle = player.color;
-                ctx.fillRect(player.x, player.y, player.width, player.height);
-                
-                // Add some detail
-                ctx.fillStyle = '#00cc66';
-                ctx.fillRect(player.x + 5, player.y + 5, player.width - 10, player.height - 10);
+                if (playerImgLoaded) {
+                    ctx.drawImage(
+                        playerImg,
+                        player.x,
+                        player.y,
+                        player.width,
+                        player.height
+                    );
+                } else {
+                    ctx.fillStyle = player.color;
+                    ctx.fillRect(player.x, player.y, player.width, player.height);
+                    // Add some detail
+                    ctx.fillStyle = '#00cc66';
+                    ctx.fillRect(player.x + 5, player.y + 5, player.width - 10, player.height - 10);
+                }
             }
 
             function drawAliens() {
