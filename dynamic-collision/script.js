@@ -122,20 +122,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const newVx1 = ((blockA.mass - blockB.mass) * blockA.vx + 2 * blockB.mass * blockB.vx) / totalMass;
         const newVx2 = ((blockB.mass - blockA.mass) * blockB.vx + 2 * blockA.mass * blockA.vx) / totalMass;
         
-        // Apply velocities with precision rounding
-        blockA.vx = roundToPrecision(newVx1);
-        blockB.vx = roundToPrecision(newVx2);
+        // Apply velocities without rounding to maintain full precision
+        blockA.vx = newVx1;
+        blockB.vx = newVx2;
         
         // Separate blocks to prevent sticking with high precision
         const overlap = (blockA.width + blockB.width) / 2 - Math.abs(blockB.x - blockA.x);
         if (overlap > EPSILON) {
             const separation = overlap / 2;
             if (blockA.x < blockB.x) {
-                blockA.x = roundToPrecision(blockA.x - separation);
-                blockB.x = roundToPrecision(blockB.x + separation);
+                blockA.x = blockA.x - separation;
+                blockB.x = blockB.x + separation;
             } else {
-                blockA.x = roundToPrecision(blockA.x + separation);
-                blockB.x = roundToPrecision(blockB.x - separation);
+                blockA.x = blockA.x + separation;
+                blockB.x = blockB.x - separation;
             }
         }
         
@@ -163,22 +163,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isRunning) return;
         
         // Apply friction with high precision
-        block1.vx = roundToPrecision(block1.vx * friction);
-        block2.vx = roundToPrecision(block2.vx * friction);
+        block1.vx = block1.vx * friction;
+        block2.vx = block2.vx * friction;
         
         // Update positions with high precision
-        block1.x = roundToPrecision(block1.x + block1.vx);
-        block2.x = roundToPrecision(block2.x + block2.vx);
+        block1.x = block1.x + block1.vx;
+        block2.x = block2.x + block2.vx;
         
         // Wall collision (left wall only) with high precision
         if (block1.x <= wallWidth) {
             block1.x = wallWidth;
-            block1.vx = roundToPrecision(-block1.vx * restitution);
+            block1.vx = -block1.vx * restitution;
             collisionCount++;
         }
         if (block2.x <= wallWidth) {
             block2.x = wallWidth;
-            block2.vx = roundToPrecision(-block2.vx * restitution);
+            block2.vx = -block2.vx * restitution;
         }
         
         // Check collision between blocks
@@ -268,22 +268,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.lineWidth = 3;
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
-                ctx.lineTo(centerX + vectorLength, centerY);
-                ctx.stroke();
                 
-                // Arrow head
-                ctx.fillStyle = 'rgba(255, 255, 0, 0.8)';
-                ctx.beginPath();
-                ctx.moveTo(centerX + vectorLength, centerY);
-                ctx.lineTo(centerX + vectorLength - 8, centerY - 4);
-                ctx.lineTo(centerX + vectorLength - 8, centerY + 4);
-                ctx.fill();
+                // Draw arrow in the direction of velocity
+                if (block.vx > 0) {
+                    // Positive velocity - arrow points right
+                    ctx.lineTo(centerX + vectorLength, centerY);
+                    ctx.stroke();
+                    
+                    // Arrow head pointing right
+                    ctx.fillStyle = 'rgba(255, 255, 0, 0.8)';
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + vectorLength, centerY);
+                    ctx.lineTo(centerX + vectorLength - 8, centerY - 4);
+                    ctx.lineTo(centerX + vectorLength - 8, centerY + 4);
+                    ctx.fill();
+                } else {
+                    // Negative velocity - arrow points left
+                    ctx.lineTo(centerX - vectorLength, centerY);
+                    ctx.stroke();
+                    
+                    // Arrow head pointing left
+                    ctx.fillStyle = 'rgba(255, 255, 0, 0.8)';
+                    ctx.beginPath();
+                    ctx.moveTo(centerX - vectorLength, centerY);
+                    ctx.lineTo(centerX - vectorLength + 8, centerY - 4);
+                    ctx.lineTo(centerX - vectorLength + 8, centerY + 4);
+                    ctx.fill();
+                }
                 
-                // Display velocity value
+                // Display velocity value above the block
                 ctx.fillStyle = 'rgba(255, 255, 0, 0.9)';
                 ctx.font = '12px Inter, Arial, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText(`${block.vx.toFixed(6)}`, centerX + vectorLength + 10, centerY + 4);
+                ctx.fillText(`${block.vx.toFixed(6)}`, centerX, block.y - 10);
             }
         }
         
