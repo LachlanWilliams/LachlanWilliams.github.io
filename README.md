@@ -226,4 +226,4 @@ Main Portfolio
 
 Both the Wave Function Collapse and Retro Game are now accessible as clean subdomains, providing a much more organized and professional portfolio experience! 🎮✨
 
-- **Collatz Conjecture Visualization**: An interactive visual demonstration of the Collatz Conjecture, showing the sequence for any starting number and how numbers converge to 1. (See `collatz-visualization/`)
+

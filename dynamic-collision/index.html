@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Collision - Lachlan Williams</title>
+    <meta name="description" content="Dynamic collision simulation between two blocks with realistic physics.">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .header {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .back-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            color: #ffffff;
+            transform: translateX(-5px);
+        }
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .collision-section {
+            padding: 40px 0;
+        }
+        .collision-section .section-title {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .collision-section .section-description {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        .collision-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .collision-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .control-group label {
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .control-group input {
+            padding: 8px 12px;
+            border: 2px solid #ffffff;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            width: 80px;
+        }
+        .control-group input:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        }
+        .collision-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        .collision-btn.primary {
+            background: #ffffff;
+            color: #1f2937;
+        }
+        .collision-btn.primary:hover {
+            background: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+        }
+        .collision-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .collision-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .collision-canvas-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        #collisionCanvas {
+            border: 3px solid #ffffff;
+            border-radius: 12px;
+            background: #1f2937;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        #collisionCanvas:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+        .collision-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+        }
+        .collision-info h3 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .collision-info p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            opacity: 0.92;
+            text-align: center;
+            margin-bottom: 0;
+        }
+        @media (max-width: 768px) {
+            .collision-controls {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .control-group {
+                flex-direction: column;
+                gap: 5px;
+            }
+            #collisionCanvas {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+            }
+            .collision-section .section-title {
+                font-size: 2rem;
+            }
+            .collision-section .section-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="../index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Back to Portfolio
+            </a>
+            <h1 class="page-title">Dynamic Collision</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dynamic Collision Section -->
+        <section class="collision-section">
+            <div class="collision-container">
+                <h2 class="section-title">Dynamic Collision Simulation</h2>
+                <p class="section-description">
+                    Watch two blocks collide with realistic physics! Adjust their masses, velocities, and positions to see how they interact. 
+                    The simulation uses conservation of momentum and energy to calculate the collision outcomes.
+                </p>
+                
+                <div class="collision-controls">
+                    <div class="control-group">
+                        <label for="mass1">Mass 1:</label>
+                        <input type="number" id="mass1" min="1" max="10" value="1" step="0.5">
+                    </div>
+                    <div class="control-group">
+                        <label for="mass2">Mass 2:</label>
+                        <input type="number" id="mass2" min="1" max="10" value="10" step="0.5">
+                    </div>
+                    <div class="control-group">
+                        <label for="velocity1">Velocity 1:</label>
+                        <input type="number" id="velocity1" min="-5" max="5" value="2" step="0.5">
+                    </div>
+                    <div class="control-group">
+                        <label for="velocity2">Velocity 2:</label>
+                        <input type="number" id="velocity2" min="-5" max="5" value="-2" step="0.5">
+                    </div>
+                    <div class="control-group">
+                        <button id="startBtn" class="collision-btn primary">Start Simulation</button>
+                        <button id="resetBtn" class="collision-btn secondary">Reset</button>
+                    </div>
+                </div>
+                
+                <div class="collision-canvas-container">
+                    <canvas id="collisionCanvas" width="800" height="400"></canvas>
+                </div>
+            </div>
+            
+            <div class="collision-info">
+                <h3>How Does It Work?</h3>
+                <p>
+                    This simulation demonstrates elastic collisions between two blocks. When blocks collide, they exchange momentum while conserving total energy. 
+                    The final velocities are calculated using the conservation of momentum and the fact that the relative velocity reverses direction in an elastic collision. 
+                    Try different masses and velocities to see how they affect the collision outcome!
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html> 
