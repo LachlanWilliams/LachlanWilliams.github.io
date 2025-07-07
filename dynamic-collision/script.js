@@ -359,9 +359,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Reset inputs to defaults
         mass1Input.value = 1;
-        mass2Input.value = 10;
-        velocity1Input.value = 2;
-        velocity2Input.value = -2;
+        mass2Input.value = 1;
+        velocity1Input.value = 0;
+        velocity2Input.value = -5;
         
         updateBlockFromInputs();
         draw();
