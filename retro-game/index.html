@@ -334,16 +334,48 @@
         }
 
         @media (max-width: 600px) {
-            .game-container {
-                height: 400px;
+            .game-section {
+                padding: 20px 10px;
+                min-height: 100vh;
             }
-            
+
+            .section-header {
+                margin-bottom: 20px;
+            }
+
             .section-header h2 {
                 font-size: 2rem;
             }
             
             .section-header p {
                 font-size: 1rem;
+            }
+
+            .game-container {
+                width: 100vw;
+                height: calc(100vh - 200px);
+                max-width: none;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+                margin: 0;
+            }
+            
+            #gameCanvas {
+                width: 100%;
+                height: calc(100% - 80px);
+            }
+
+            .mobile-controls {
+                height: 80px;
+            }
+
+            .touch-area {
+                font-size: 20px;
+            }
+
+            .touch-area.shoot {
+                flex: 0 0 80px;
             }
 
             .start-content h3 {
@@ -363,26 +395,22 @@
                 gap: 15px;
             }
 
-            .mobile-controls {
-                height: 60px;
-            }
-
-            .touch-area {
-                font-size: 20px;
-            }
-
-            .touch-area.shoot {
-                flex: 0 0 80px;
+            .instructions {
+                display: none;
             }
         }
 
         @media (max-width: 480px) {
             .game-container {
-                height: 350px;
+                height: calc(100vh - 180px);
+            }
+
+            #gameCanvas {
+                height: calc(100% - 70px);
             }
 
             .mobile-controls {
-                height: 50px;
+                height: 70px;
             }
 
             .touch-area {
@@ -391,6 +419,28 @@
 
             .touch-area.shoot {
                 flex: 0 0 70px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .game-container {
+                height: calc(100vh - 160px);
+            }
+
+            #gameCanvas {
+                height: calc(100% - 60px);
+            }
+
+            .mobile-controls {
+                height: 60px;
+            }
+
+            .touch-area {
+                font-size: 16px;
+            }
+
+            .touch-area.shoot {
+                flex: 0 0 60px;
             }
         }
     </style>
@@ -413,7 +463,7 @@
         <section class="game-section">
             <div class="section-header">
                 <h2>Retro Game</h2>
-                <p>Have fun</p>
+                <p>Take a break and enjoy a classic arcade game! Click on the game area to start playing.</p>
             </div>
                 
             <div class="game-container" id="gameContainer">
@@ -535,6 +585,23 @@
             const livesElement = document.getElementById('lives');
             const gameOverElement = document.getElementById('gameOver');
             const finalScoreElement = document.getElementById('finalScore');
+
+            // Resize canvas for mobile
+            function resizeCanvas() {
+                if (isMobile) {
+                    const container = document.getElementById('gameContainer');
+                    const controlsHeight = 80; // Height of mobile controls
+                    
+                    canvas.width = container.clientWidth;
+                    canvas.height = container.clientHeight - controlsHeight;
+                } else {
+                    canvas.width = 800;
+                    canvas.height = 600;
+                }
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
 
             // Game state
             let score = 0;
