@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markov Chain Visualization - Lachlan Williams</title>
+  <meta name="description" content="Interactive visualization of Markov Chains - see how probability transitions work in action.">
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: white;
+    }
+    .header {
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    .back-link:hover {
+      color: #ffffff;
+      transform: translateX(-5px);
+    }
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .markov-section {
+      padding: 40px 0;
+    }
+    .markov-section .section-title {
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .markov-section .section-description {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 50px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+    .markov-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .markov-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .control-group label {
+      font-weight: 600;
+      color: #ffffff;
+    }
+    .markov-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      background: #ffffff;
+      color: #1f2937;
+    }
+    .markov-btn:hover:not(:disabled) {
+      background: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+    }
+    .markov-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .markov-canvas-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    #markov-canvas {
+      border: 3px solid #ffffff;
+      border-radius: 12px;
+      background: #1f2937;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    #markov-canvas:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+    .markov-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    .info-panel {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .info-panel h3 {
+      color: #ffffff;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+    .info-panel p {
+      margin: 0;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+    .transition-matrix {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 40px;
+    }
+    .transition-matrix h3 {
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .matrix-cell {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .matrix-cell input {
+      width: 60px;
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.9);
+      color: #1f2937;
+      font-weight: 600;
+    }
+    .matrix-cell label {
+      display: block;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+    .markov-explanation {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 40px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 40px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .markov-explanation h3 {
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    .markov-explanation p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      opacity: 0.92;
+      text-align: center;
+      margin-bottom: 0;
+    }
+    @media (max-width: 768px) {
+      .markov-controls {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .control-group {
+        flex-direction: column;
+        gap: 5px;
+      }
+      #markov-canvas {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+      }
+      .markov-section .section-title {
+        font-size: 2rem;
+      }
+      .markov-section .section-description {
+        font-size: 1rem;
+      }
+      .markov-info {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .matrix-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="../index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Portfolio
+      </a>
+      <h1 class="page-title">Markov Chain</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Markov Chain Section -->
+    <section class="markov-section">
+      <div class="markov-container">
+        <h2 class="section-title">Markov Chain Visualization</h2>
+        <p class="section-description">
+          A Markov Chain is a mathematical system that transitions between states based on probability rules. <br>
+          <b>Each state has transition probabilities to other states, and the next state depends only on the current state.</b> <br>
+          <span style="opacity:0.7;font-size:0.98em;">Adjust the transition probabilities below and watch the chain evolve over time!</span>
+        </p>
+        
+        <div class="transition-matrix">
+          <h3>Transition Matrix</h3>
+          <div class="matrix-grid">
+            <div class="matrix-cell">
+              <label>P(A→A)</label>
+              <input type="number" id="p-aa" min="0" max="1" step="0.1" value="0.3">
+            </div>
+            <div class="matrix-cell">
+              <label>P(A→B)</label>
+              <input type="number" id="p-ab" min="0" max="1" step="0.1" value="0.7">
+            </div>
+            <div class="matrix-cell">
+              <label>P(A→C)</label>
+              <input type="number" id="p-ac" min="0" max="1" step="0.1" value="0.0">
+            </div>
+            <div class="matrix-cell">
+              <label>P(B→A)</label>
+              <input type="number" id="p-ba" min="0" max="1" step="0.1" value="0.2">
+            </div>
+            <div class="matrix-cell">
+              <label>P(B→B)</label>
+              <input type="number" id="p-bb" min="0" max="1" step="0.1" value="0.5">
+            </div>
+            <div class="matrix-cell">
+              <label>P(B→C)</label>
+              <input type="number" id="p-bc" min="0" max="1" step="0.1" value="0.3">
+            </div>
+            <div class="matrix-cell">
+              <label>P(C→A)</label>
+              <input type="number" id="p-ca" min="0" max="1" step="0.1" value="0.1">
+            </div>
+            <div class="matrix-cell">
+              <label>P(C→B)</label>
+              <input type="number" id="p-cb" min="0" max="1" step="0.1" value="0.4">
+            </div>
+            <div class="matrix-cell">
+              <label>P(C→C)</label>
+              <input type="number" id="p-cc" min="0" max="1" step="0.1" value="0.5">
+            </div>
+          </div>
+        </div>
+
+        <div class="markov-controls">
+          <div class="control-group">
+            <label for="start-state">Starting State:</label>
+            <select id="start-state">
+              <option value="A">State A</option>
+              <option value="B">State B</option>
+              <option value="C">State C</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="steps">Number of Steps:</label>
+            <input type="number" id="steps" min="10" max="1000" value="100">
+          </div>
+          <div class="control-group">
+            <button id="start-btn" class="markov-btn">Run Simulation</button>
+          </div>
+          <div class="control-group">
+            <button id="reset-btn" class="markov-btn">Reset</button>
+          </div>
+        </div>
+
+        <div class="markov-canvas-container">
+          <canvas id="markov-canvas" width="800" height="400"></canvas>
+        </div>
+
+        <div class="markov-info">
+          <div class="info-panel">
+            <h3>Current State</h3>
+            <p id="current-state">Click "Run Simulation" to start</p>
+          </div>
+          <div class="info-panel">
+            <h3>State Distribution</h3>
+            <p id="state-distribution">Waiting for simulation...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="markov-explanation">
+        <h3>What is a Markov Chain?</h3>
+        <p>
+          A Markov Chain is a stochastic model that describes a sequence of possible events where the probability of each event depends only on the state attained in the previous event. <br>
+          This "memoryless" property makes Markov Chains powerful tools for modeling systems in physics, biology, economics, and many other fields. <br>
+          The transition matrix shows the probability of moving from one state to another, and the visualization demonstrates how the system evolves over time!
+        </p>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html> 

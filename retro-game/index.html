@@ -16,6 +16,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: white;
+            touch-action: manipulation;
         }
 
         .header {
@@ -107,6 +108,7 @@
             margin: 0 auto;
             cursor: pointer;
             transition: all 0.3s ease;
+            touch-action: none;
         }
 
         .game-container:hover {
@@ -241,6 +243,53 @@
             backdrop-filter: blur(5px);
         }
 
+        /* Mobile Touch Controls */
+        .mobile-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            display: none;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .mobile-controls.show {
+            display: flex;
+        }
+
+        .touch-area {
+            flex: 1;
+            height: 100%;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .touch-area:active {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .touch-area.left {
+            background: linear-gradient(90deg, rgba(0, 255, 136, 0.3) 0%, transparent 100%);
+        }
+
+        .touch-area.right {
+            background: linear-gradient(270deg, rgba(0, 255, 136, 0.3) 0%, transparent 100%);
+        }
+
+        .touch-area.shoot {
+            background: linear-gradient(180deg, rgba(255, 68, 68, 0.3) 0%, transparent 100%);
+            flex: 0 0 100px;
+        }
+
         .stars {
             position: absolute;
             width: 100%;
@@ -313,6 +362,36 @@
                 flex-direction: column;
                 gap: 15px;
             }
+
+            .mobile-controls {
+                height: 60px;
+            }
+
+            .touch-area {
+                font-size: 20px;
+            }
+
+            .touch-area.shoot {
+                flex: 0 0 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                height: 350px;
+            }
+
+            .mobile-controls {
+                height: 50px;
+            }
+
+            .touch-area {
+                font-size: 18px;
+            }
+
+            .touch-area.shoot {
+                flex: 0 0 70px;
+            }
         }
     </style>
 </head>
@@ -341,7 +420,7 @@
                 <div class="click-to-start" id="clickToStart">
                     <div class="start-content">
                         <h3>Click to Start</h3>
-                        <p>Use ← → to move, F to shoot</p>
+                        <p id="controlInstructions">Use ← → to move, F to shoot</p>
                         <div class="start-icon">🎮</div>
                     </div>
                 </div>
@@ -356,8 +435,14 @@
                     <p>Final Score: <span id="finalScore">0</span></p>
                     <button class="restart-btn" onclick="restartGame()">Play Again</button>
                 </div>
-                <div class="instructions">
+                <div class="instructions" id="instructions">
                     Use ← → to move, F to shoot
+                </div>
+                <!-- Mobile Touch Controls -->
+                <div class="mobile-controls" id="mobileControls">
+                    <div class="touch-area left" id="leftControl">←</div>
+                    <div class="touch-area right" id="rightControl">→</div>
+                    <div class="touch-area shoot" id="shootControl">🔫</div>
                 </div>
             </div>
         </section>
@@ -372,9 +457,52 @@
 
         let gameInitialized = false;
         let gameRunning = false;
+        let isMobile = false;
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        // Detect mobile device
+        function detectMobile() {
+            isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                      ('ontouchstart' in window) || 
+                      (navigator.maxTouchPoints > 0);
+            return isMobile;
+        }
+
+        // Update UI for mobile
+        function updateUIForMobile() {
+            const controlInstructions = document.getElementById('controlInstructions');
+            const instructions = document.getElementById('instructions');
+            const mobileControls = document.getElementById('mobileControls');
+            
+            if (isMobile) {
+                if (controlInstructions) {
+                    controlInstructions.textContent = 'Tap to start! Use touch controls below';
+                }
+                if (instructions) {
+                    instructions.textContent = 'Touch ← → to move, 🔫 to shoot';
+                }
+                if (mobileControls) {
+                    mobileControls.classList.add('show');
+                }
+            } else {
+                if (controlInstructions) {
+                    controlInstructions.textContent = 'Use ← → to move, F to shoot';
+                }
+                if (instructions) {
+                    instructions.textContent = 'Use ← → to move, F to shoot';
+                }
+                if (mobileControls) {
+                    mobileControls.classList.remove('show');
+                }
+            }
+        }
 
         // Add click event listener to start the game
         document.addEventListener('DOMContentLoaded', function() {
+            detectMobile();
+            updateUIForMobile();
+            
             const gameContainer = document.getElementById('gameContainer');
             const clickToStart = document.getElementById('clickToStart');
             
@@ -450,6 +578,11 @@
             // Explosions
             let explosions = [];
 
+            // Touch controls state
+            let touchLeft = false;
+            let touchRight = false;
+            let touchShoot = false;
+
             // Input handling
             const keys = {};
             document.addEventListener('keydown', (e) => {
@@ -461,6 +594,83 @@
             document.addEventListener('keyup', (e) => {
                 keys[e.key] = false;
             });
+
+            // Touch event handlers
+            function setupTouchControls() {
+                const leftControl = document.getElementById('leftControl');
+                const rightControl = document.getElementById('rightControl');
+                const shootControl = document.getElementById('shootControl');
+
+                if (leftControl) {
+                    leftControl.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        touchLeft = true;
+                    });
+                    leftControl.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        touchLeft = false;
+                    });
+                }
+
+                if (rightControl) {
+                    rightControl.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        touchRight = true;
+                    });
+                    rightControl.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        touchRight = false;
+                    });
+                }
+
+                if (shootControl) {
+                    shootControl.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        if (gameRunning) {
+                            shoot();
+                        }
+                    });
+                }
+
+                // Swipe controls for movement
+                canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    touchStartX = touch.clientX;
+                    touchStartY = touch.clientY;
+                });
+
+                canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    if (!gameRunning) return;
+                    
+                    const touch = e.touches[0];
+                    const deltaX = touch.clientX - touchStartX;
+                    const deltaY = touchStartY - touch.clientY;
+                    
+                    // Horizontal swipe for movement
+                    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 30) {
+                        if (deltaX > 0) {
+                            // Swipe right
+                            player.x = Math.min(canvas.width - player.width, player.x + player.speed * 2);
+                        } else {
+                            // Swipe left
+                            player.x = Math.max(0, player.x - player.speed * 2);
+                        }
+                        touchStartX = touch.clientX;
+                    }
+                    
+                    // Vertical swipe up for shooting
+                    if (deltaY > 50 && Math.abs(deltaY) > Math.abs(deltaX)) {
+                        shoot();
+                        touchStartY = touch.clientY;
+                    }
+                });
+
+                canvas.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                });
+            }
 
             // Create stars
             function createStars() {
@@ -536,11 +746,19 @@
             function update() {
                 if (!gameRunning) return;
 
-                // Player movement
+                // Player movement - keyboard
                 if (keys['ArrowLeft'] && player.x > 0) {
                     player.x -= player.speed;
                 }
                 if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
+                    player.x += player.speed;
+                }
+
+                // Player movement - touch controls
+                if (touchLeft && player.x > 0) {
+                    player.x -= player.speed;
+                }
+                if (touchRight && player.x < canvas.width - player.width) {
                     player.x += player.speed;
                 }
 
@@ -721,6 +939,7 @@
             }
 
             // Initialize game
+            setupTouchControls();
             createStars();
             initAliens();
             gameLoop();
